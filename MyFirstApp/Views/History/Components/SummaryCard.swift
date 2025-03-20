@@ -1,37 +1,30 @@
+// SummaryCard.swift
 import SwiftUI
 
 struct SummaryCard: View {
     @ObservedObject var viewModel: SleepViewModel
     
     var body: some View {
+        let totalCycles = viewModel.sleepResults.map { $0.totalCycles }.reduce(0, +)
+        
         VStack(alignment: .leading, spacing: 10) {
-            Text("Weekly Average")
+            Text("Weekly Summary")
                 .font(.headline)
                 .foregroundColor(.primary)
             
             HStack {
                 VStack(alignment: .leading) {
-                    Text("Sleep Cycle Score")
+                    Text("Total Sleep Cycles")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
-                    Text("40)")
+                    Text("\(totalCycles)")
                         .font(.title)
                         .foregroundColor(.blue)
                         .fontWeight(.bold)
                 }
                 
                 Spacer()
-                
-                VStack(alignment: .trailing) {
-                    Text("Sleep Cycles")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Text("70)")
-                        .font(.title)
-                        .foregroundColor(.blue)
-                        .fontWeight(.bold)
-                }
             }
         }
         .padding()
@@ -41,3 +34,5 @@ struct SummaryCard: View {
         .padding(.horizontal)
     }
 }
+
+

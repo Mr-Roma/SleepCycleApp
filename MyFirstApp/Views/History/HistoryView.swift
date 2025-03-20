@@ -1,10 +1,4 @@
-//
-//  HistoryView.swift
-//  MyFirstApp
-//
-//  Created by Romario Marcal on 17/03/25.
-
-
+// HistoryView.swift
 import SwiftUI
 
 struct HistoryView: View {
@@ -18,15 +12,12 @@ struct HistoryView: View {
                     .foregroundColor(.primary)
                     .padding(.top)
                 
-                // Weekly Average Card
+                // Weekly Summary Card
                 SummaryCard(viewModel: viewModel)
                 
-                // Past Sleep Sessions
-                ForEach(0..<viewModel.sleepResults.count, id: \.self) { index in
-                    let date = Calendar.current.date(byAdding: .day, value: -index, to: Date()) ?? Date()
-                    let result = viewModel.sleepResults[index]
-                    
-                    HistoryRow(date: date, result: result)
+                // Past Sleep Sessions (sorted by timestamp)
+                ForEach(viewModel.sleepResults.sorted(by: { $0.timestamp > $1.timestamp }), id: \.timestamp) { result in
+                    HistoryRow(date: result.timestamp, result: result)
                 }
                 
                 Spacer()
@@ -35,13 +26,3 @@ struct HistoryView: View {
         }
     }
 }
-
-
-#Preview {
-    HistoryView(viewModel: SleepViewModel())
-}
-
-
-
-
-

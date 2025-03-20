@@ -18,5 +18,5 @@ struct MyFirstAppApp: App {
 
 
 #Preview {
-    SplashView()
+    ContentView()
 }

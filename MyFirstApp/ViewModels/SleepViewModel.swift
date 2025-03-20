@@ -7,15 +7,19 @@ class SleepViewModel: ObservableObject {
         wakeUpTime: Date()
     )
     
-    @Published var sleepResults: [SleepResult] = [
-        SleepResult(sleepScore: 87, sleepDuration: "8h 15m", deepSleepPercentage: 0.22, remSleepPercentage: 0.27),
-        SleepResult(sleepScore: 82, sleepDuration: "7h 45m", deepSleepPercentage: 0.20, remSleepPercentage: 0.25),
-        SleepResult(sleepScore: 79, sleepDuration: "7h 10m", deepSleepPercentage: 0.18, remSleepPercentage: 0.22),
-        SleepResult(sleepScore: 91, sleepDuration: "8h 30m", deepSleepPercentage: 0.25, remSleepPercentage: 0.30),
-        SleepResult(sleepScore: 85, sleepDuration: "8h 00m", deepSleepPercentage: 0.21, remSleepPercentage: 0.26)
-    ]
+    @Published var sleepResults: [SleepResult] = []
     
-    // MARK: - Ultradian Sleep Cycle Calculations
+    // Function to save sleep results
+    func saveSleepResult(sleepScore: Int, sleepDuration: String, deepSleepPercentage: Double, remSleepPercentage: Double, totalCycles: Int) {
+        let newResult = SleepResult(
+            sleepDuration: sleepDuration,
+            deepSleepPercentage: deepSleepPercentage,
+            remSleepPercentage: remSleepPercentage,
+            totalCycles: totalCycles,
+            timestamp: Date() // Save the current date and time
+        )
+        sleepResults.append(newResult)
+    }
     
     /// Calculate the best sleep time, wake-up time, and total sleep duration
     func calculateSleepCycle() -> (bestSleepTime: String, bestWakeUpTime: String, totalSleepDuration: String, totalCycles: Int) {

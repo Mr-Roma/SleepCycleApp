@@ -1,10 +1,4 @@
-//
-//  HistoryRow.swift
-//  MyFirstApp
-//
-//  Created by Romario Marcal on 17/03/25.
-//
-
+// HistoryRow.swift
 import SwiftUI
 
 struct HistoryRow: View {
@@ -21,30 +15,16 @@ struct HistoryRow: View {
                         .font(.headline)
                         .foregroundColor(.primary)
                     
-                    Text(result.sleepDuration)
+                    Text("\(result.totalCycles) Cycles")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                VStack(alignment: .trailing, spacing: 4) {
-                    HStack(alignment: .lastTextBaseline, spacing: 0) {
-                        Text("\(result.sleepScore)")
-                            .font(.title2)
-                            .foregroundColor(.blue)
-                            .fontWeight(.bold)
-                        
-                        Text("/100")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    // Quality label based on score
-                    Text(qualityLabel(for: result.sleepScore))
-                        .font(.caption)
-                        .foregroundColor(qualityColor(for: result.sleepScore))
-                }
+                Text(result.sleepDuration)
+                    .font(.subheadline)
+                    .foregroundColor(.green)
                 
                 Image(systemName: "chevron.right")
                     .foregroundColor(.gray)
@@ -58,29 +38,5 @@ struct HistoryRow: View {
         .buttonStyle(PlainButtonStyle())
         .padding(.horizontal)
     }
-    
-    private func qualityLabel(for score: Int) -> String {
-        switch score {
-        case 90...100: return "Excellent"
-        case 80..<90: return "Very Good"
-        case 70..<80: return "Good"
-        case 60..<70: return "Fair"
-        default: return "Poor"
-        }
-    }
-    
-    private func qualityColor(for score: Int) -> Color {
-        switch score {
-        case 90...100: return .green
-        case 80..<90: return .blue
-        case 70..<80: return .yellow
-        case 60..<70: return .orange
-        default: return .red
-        }
-    }
 }
 
-
-#Preview {
-    HistoryRow(date: Date(), result: .init(sleepScore: 80, sleepDuration: "", deepSleepPercentage: 0.5, remSleepPercentage: 0.3))
-}

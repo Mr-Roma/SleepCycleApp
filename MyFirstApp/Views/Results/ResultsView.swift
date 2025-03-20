@@ -1,5 +1,7 @@
 import SwiftUI
+// ResultsView.swift
 
+// ResultsView.swift
 struct ResultsView: View {
     @ObservedObject var viewModel: SleepViewModel
     
@@ -17,17 +19,17 @@ struct ResultsView: View {
                 // Circle (represent total sleep cycles)
                 ZStack {
                     Image("neon")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .phaseAnimator([false, true]) { wwdc24, chromaRotate in
-                                        wwdc24
-                                            .hueRotation(.degrees(chromaRotate ? 420 : 0))
-                                    } animation: { chromaRotate in
-                                        .easeInOut(duration: 2)
-                                    }
+                        .resizable()
+                        .scaledToFit()
+                        .phaseAnimator([false, true]) { wwdc24, chromaRotate in
+                            wwdc24
+                                .hueRotation(.degrees(chromaRotate ? 420 : 0))
+                        } animation: { chromaRotate in
+                            .easeInOut(duration: 2)
+                        }
                     
                     // Display total sleep cycles
-                    VStack  {
+                    VStack {
                         Text("\(totalCycles)")
                             .font(.system(size: 40, weight: .bold))
                             .foregroundColor(.white)
@@ -35,17 +37,13 @@ struct ResultsView: View {
                             .font(.caption)
                             .foregroundColor(.white)
                     }
-                    .padding(10)
                 }
-                .padding(.bottom, 20)
             }
             .frame(maxWidth: .infinity)
             
-            
             ScrollView {
                 VStack(spacing: 20) {
-                    //Best Recommendation
-                    // Alternative Sleep Times
+                    // Best Recommendation
                     Text("Best Sleep Times")
                         .font(.headline)
                         .foregroundColor(.primary)
@@ -72,8 +70,6 @@ struct ResultsView: View {
                         data: totalSleepDuration
                     )
                     
-                    // Sleep Quality
-                    
                     // Alternative Sleep Times
                     Text("Alternative Sleep Times")
                         .font(.headline)
@@ -93,10 +89,6 @@ struct ResultsView: View {
             
             Spacer()
         }
-        // Hide the navigation bar
+        // Remove the onAppear modifier
     }
 }
-
-
-
-

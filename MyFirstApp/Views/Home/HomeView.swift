@@ -1,10 +1,10 @@
 import SwiftUI
-
+// HomeView.swift
 struct HomeView: View {
     @ObservedObject var viewModel: SleepViewModel
     @State private var showResultsView = false
-    @State private var showValidationAlert = false // To show an alert if fields are not filled
-    @State private var validationMessage = "" // Message to display in the alert
+    @State private var showValidationAlert = false
+    @State private var validationMessage = ""
     
     var body: some View {
         NavigationView {
@@ -45,11 +45,27 @@ struct HomeView: View {
                     
                     // Analyze Button
                     Button(action: {
-                        // Validate inputs before proceeding
                         if validateInputs() {
-                            showResultsView = true // Navigate to ResultsView only if inputs are valid
+                            // Calculate sleep score, duration, and total cycles
+                            let (_, _, _, totalCycles) = viewModel.calculateSleepCycle()
+                            let sleepScore = Int.random(in: 70...100) // Replace with actual calculation
+                            let sleepDuration = "8h 15m" // Replace with actual calculation
+                            let deepSleepPercentage = 0.22 // Replace with actual calculation
+                            let remSleepPercentage = 0.27 // Replace with actual calculation
+                            
+                            // Save the result
+                            viewModel.saveSleepResult(
+                                sleepScore: sleepScore,
+                                sleepDuration: sleepDuration,
+                                deepSleepPercentage: deepSleepPercentage,
+                                remSleepPercentage: remSleepPercentage,
+                                totalCycles: totalCycles // Pass totalCycles here
+                            )
+                            
+                            // Navigate to ResultsView
+                            showResultsView = true
                         } else {
-                            showValidationAlert = true // Show alert if validation fails
+                            showValidationAlert = true
                         }
                     }) {
                         Text("Analyze")
@@ -62,8 +78,8 @@ struct HomeView: View {
                     }
                     .padding(.horizontal)
                     .padding(.top, 20)
-                    .disabled(!areInputsValid()) // Disable button if inputs are not valid
-                    .opacity(areInputsValid() ? 1 : 0.6) // Reduce opacity if button is disabled
+                    .disabled(!areInputsValid())
+                    .opacity(areInputsValid() ? 1 : 0.6)
                     
                     // NavigationLink to ResultsView
                     NavigationLink(
@@ -74,15 +90,16 @@ struct HomeView: View {
                 }
                 .padding(.vertical)
             }
-            .navigationBarHidden(true) // Hide the navigation bar
+            .navigationBarHidden(true)
             .alert(isPresented: $showValidationAlert) {
                 Alert(
                     title: Text("Missing Information"),
                     message: Text(validationMessage),
-                    dismissButton: .default(Text("OK")))
+                    dismissButton: .default(Text("OK"))
+                )
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle()) // Use stack navigation for full-screen transitions
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     // MARK: - Input Validation
