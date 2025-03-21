@@ -1,10 +1,12 @@
 import SwiftUI
 // HomeView.swift
 struct HomeView: View {
+    @Environment(\.modelContext) private var modelContext
     @ObservedObject var viewModel: SleepViewModel
     @State private var showResultsView = false
     @State private var showValidationAlert = false
     @State private var validationMessage = ""
+   
     
     var body: some View {
         NavigationView {
@@ -47,21 +49,20 @@ struct HomeView: View {
                     Button(action: {
                         if validateInputs() {
                             // Calculate sleep score, duration, and total cycles
-                            let (_, _, _, totalCycles) = viewModel.calculateSleepCycle()
-                            let sleepScore = Int.random(in: 70...100) // Replace with actual calculation
-                            let sleepDuration = "8h 15m" // Replace with actual calculation
-                            let deepSleepPercentage = 0.22 // Replace with actual calculation
-                            let remSleepPercentage = 0.27 // Replace with actual calculation
+                            let (bestTimeToSleep, bestTimeToWake, totalSleepDuration, totalCycles) = viewModel.calculateSleepCycle()
+                            let sleepDurationInSeconds = convertDurationToSeconds(totalSleepDuration)
+
                             
-                            // Save the result
+                            
                             viewModel.saveSleepResult(
-                                sleepScore: sleepScore,
-                                sleepDuration: sleepDuration,
-                                deepSleepPercentage: deepSleepPercentage,
-                                remSleepPercentage: remSleepPercentage,
-                                totalCycles: totalCycles // Pass totalCycles here
+                                context: modelContext,
+                                sleepDuration: totalSleepDuration, // 8 jam dalam detik
+                                deepSleepPercentage: bestTimeToSleep,
+                                remSleepPercentage: bestTimeToWake,
+                                totalCycles: totalCycles
                             )
                             
+       
                             // Navigate to ResultsView
                             showResultsView = true
                         } else {
@@ -126,5 +127,18 @@ struct HomeView: View {
             return false
         }
         return true
+    }
+    func convertDurationToSeconds(_ duration: String) -> TimeInterval {
+        let components = duration.split(separator: " ")
+        var totalSeconds: TimeInterval = 0
+        
+        for component in components {
+            if component.hasSuffix("h"), let hours = Int(component.dropLast()) {
+                totalSeconds += TimeInterval(hours * 3600)
+            } else if component.hasSuffix("m"), let minutes = Int(component.dropLast()) {
+                totalSeconds += TimeInterval(minutes * 60)
+            }
+        }
+        return totalSeconds
     }
 }

@@ -4,7 +4,7 @@ import SwiftUI
 // ResultsView.swift
 struct ResultsView: View {
     @ObservedObject var viewModel: SleepViewModel
-    
+    @Environment(\.modelContext) private var modelContext
     var body: some View {
         let (bestSleepTime, bestWakeUpTime, totalSleepDuration, totalCycles) = viewModel.calculateSleepCycle()
         let alternativeSleepTimes = viewModel.getAlternativeSleepTimes()

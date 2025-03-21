@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 class SleepViewModel: ObservableObject {
     @Published var sleepData = SleepData(
@@ -10,15 +11,29 @@ class SleepViewModel: ObservableObject {
     @Published var sleepResults: [SleepResult] = []
     
     // Function to save sleep results
-    func saveSleepResult(sleepScore: Int, sleepDuration: String, deepSleepPercentage: Double, remSleepPercentage: Double, totalCycles: Int) {
+    func saveSleepResult(context: ModelContext, sleepDuration: String, deepSleepPercentage: String, remSleepPercentage: String, totalCycles: Int) {
         let newResult = SleepResult(
             sleepDuration: sleepDuration,
             deepSleepPercentage: deepSleepPercentage,
             remSleepPercentage: remSleepPercentage,
-            totalCycles: totalCycles,
-            timestamp: Date() // Save the current date and time
+            totalCycles: totalCycles
         )
-        sleepResults.append(newResult)
+        
+        context.insert(newResult)
+        
+        do {
+            try context.save() // Simpan ke SwiftData dengan error handling
+            print("""
+                ✅ Data saved successfully:
+                - Sleep Duration: \(newResult.sleepDuration) seconds
+                - Deep Sleep: \(newResult.deepSleepPercentage)%
+                - REM Sleep: \(newResult.remSleepPercentage)%
+                - Total Cycles: \(newResult.totalCycles)
+                - Timestamp: \(newResult.timestamp)
+                """)
+        } catch {
+            print("❌ Error saving sleep result: \(error.localizedDescription)")
+        }
     }
     
     /// Calculate the best sleep time, wake-up time, and total sleep duration
@@ -33,9 +48,11 @@ class SleepViewModel: ObservableObject {
         // Calculate total sleep duration in minutes
         let totalSleepDuration = numberOfCycles * 90
         
-        // Calculate the best sleep time
+        // Convert wakeUpTime to total minutes in the day
         let calendar = Calendar.current
         let wakeUpTimeInMinutes = calendar.component(.hour, from: wakeUpTime) * 60 + calendar.component(.minute, from: wakeUpTime)
+        
+        // Calculate the best sleep time
         var bestSleepTimeInMinutes = wakeUpTimeInMinutes - totalSleepDuration - fallAsleepMinutes
         
         // Ensure the sleep time is on the same night as the wake-up time
@@ -43,16 +60,11 @@ class SleepViewModel: ObservableObject {
             bestSleepTimeInMinutes += 24 * 60 // Adjust to the previous night
         }
         
-        let bestSleepTime = convertMinutesToTime(minutes: bestSleepTimeInMinutes)
+        let bestSleepTime = convertMinutesToTime(bestSleepTimeInMinutes)
+        let bestWakeUpTime = convertMinutesToTime(wakeUpTimeInMinutes)
         
-        // Calculate the best wake-up time
-        let bestWakeUpTimeInMinutes = wakeUpTimeInMinutes
-        let bestWakeUpTime = convertMinutesToTime(minutes: bestWakeUpTimeInMinutes)
-        
-        // Convert total sleep duration to hours and minutes
-        let totalSleepHours = totalSleepDuration / 60
-        let totalSleepMinutes = totalSleepDuration % 60
-        let totalSleepDurationFormatted = "\(totalSleepHours)h \(totalSleepMinutes)m"
+        // Format total sleep duration
+        let totalSleepDurationFormatted = "\(totalSleepDuration / 60)h \(totalSleepDuration % 60)m"
         
         return (bestSleepTime, bestWakeUpTime, totalSleepDurationFormatted, numberOfCycles)
     }
@@ -70,14 +82,14 @@ class SleepViewModel: ObservableObject {
         return durations.map { duration in
             var sleepTimeInMinutes = wakeUpTimeInMinutes - duration - fallAsleepMinutes
             
-            // Ensure the sleep time is on the same night as the wake-up time
             if sleepTimeInMinutes < 0 {
                 sleepTimeInMinutes += 24 * 60 // Adjust to the previous night
             }
             
-            let sleepTime = convertMinutesToTime(minutes: sleepTimeInMinutes)
-            let wakeUpTime = convertMinutesToTime(minutes: wakeUpTimeInMinutes)
+            let sleepTime = convertMinutesToTime(sleepTimeInMinutes)
+            let wakeUpTime = convertMinutesToTime(wakeUpTimeInMinutes)
             let durationFormatted = "\(duration / 60)h \(duration % 60)m"
+            
             return (sleepTime, wakeUpTime, durationFormatted)
         }
     }
@@ -99,8 +111,8 @@ class SleepViewModel: ObservableObject {
     }
     
     /// Convert minutes to time format (HH:mm)
-    private func convertMinutesToTime(minutes: Int) -> String {
-        let hours = minutes / 60
+    private func convertMinutesToTime(_ minutes: Int) -> String {
+        let hours = (minutes / 60) % 24  // Pastikan tetap dalam format 24 jam
         let mins = minutes % 60
         return String(format: "%02d:%02d", hours, mins)
     }
