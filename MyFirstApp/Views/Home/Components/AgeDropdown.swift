@@ -10,7 +10,10 @@ struct AgeDropdown: View {
     @Binding var selectedOption: String
     @State private var isExpanded = false
     
-    let options = ["Children", "Teenagers", "Adults", "Elderly"]
+    let options = ["Children (0-12 years)",
+                   "Teenagers (13-18 years)",
+                   "Adults (19-64 years)",
+                   "Elderly (65 years+)"]
     
     var body: some View {
         VStack {

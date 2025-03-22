@@ -1,4 +1,6 @@
+
 import SwiftUI
+
 // HomeView.swift
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
@@ -7,15 +9,10 @@ struct HomeView: View {
     @State private var showValidationAlert = false
     @State private var validationMessage = ""
    
-    
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    // App Title
-                    Text("SleepCycle")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
-                        .foregroundColor(.primary)
                     
                     // Image
                     Image(systemName: "moon.stars.fill")
@@ -25,19 +22,28 @@ struct HomeView: View {
                         .foregroundColor(.blue)
                         .padding()
                     
-                    // Description
-                    Text("Analyze your sleep patterns to improve your rest quality and wake up refreshed.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                    // Description and "Read More" link
+                    VStack {
+                        Text("Analyze your sleep patterns to improve your rest quality and wake up refreshed. Please read the full information below.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+
+                        NavigationLink(destination: SleepCycleInfo()) {
+                            Text("See more")
+                                .font(.subheadline)
+                                .foregroundColor(.blue)
+                                .padding(.top, 8)
+                        }
+                    }
                     
                     // Form Fields
                     FormSection(title: "Age") {
                         AgeDropdown(selectedOption: $viewModel.sleepData.ageCategory)
                     }
                     
-                    FormSection(title: "Time to Fall Asleep") {
+                    FormSection(title: "Time to Fall A Sleep") {
                         TimeToSleepPicker(fallAsleepMinutes: $viewModel.sleepData.fallAsleepMinutes)
                     }
                     
@@ -51,18 +57,15 @@ struct HomeView: View {
                             // Calculate sleep score, duration, and total cycles
                             let (bestTimeToSleep, bestTimeToWake, totalSleepDuration, totalCycles) = viewModel.calculateSleepCycle()
                             let sleepDurationInSeconds = convertDurationToSeconds(totalSleepDuration)
-
-                            
                             
                             viewModel.saveSleepResult(
                                 context: modelContext,
-                                sleepDuration: totalSleepDuration, // 8 jam dalam detik
+                                sleepDuration: totalSleepDuration,
                                 deepSleepPercentage: bestTimeToSleep,
                                 remSleepPercentage: bestTimeToWake,
                                 totalCycles: totalCycles
                             )
                             
-       
                             // Navigate to ResultsView
                             showResultsView = true
                         } else {
@@ -128,6 +131,7 @@ struct HomeView: View {
         }
         return true
     }
+    
     func convertDurationToSeconds(_ duration: String) -> TimeInterval {
         let components = duration.split(separator: " ")
         var totalSeconds: TimeInterval = 0
