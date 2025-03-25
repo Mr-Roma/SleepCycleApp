@@ -1,47 +1,47 @@
 import SwiftUI
-// ResultsView.swift
 
-// ResultsView.swift
 struct ResultsView: View {
     @ObservedObject var viewModel: SleepViewModel
     @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         let (bestSleepTime, bestWakeUpTime, totalSleepDuration, totalCycles) = viewModel.calculateSleepCycle()
         let alternativeSleepTimes = viewModel.getAlternativeSleepTimes()
         
-        VStack(spacing: 0) {
-            // Header area
-            VStack(spacing: 20) {
-                Text("Result")
-                    .font(.system(size: 30, weight: .bold))
-                    .padding(.top, 40)
-                
-                // Circle (represent total sleep cycles)
-                ZStack {
-                    Image("neon")
-                        .resizable()
-                        .scaledToFit()
-                        .phaseAnimator([false, true]) { wwdc24, chromaRotate in
-                            wwdc24
-                                .hueRotation(.degrees(chromaRotate ? 420 : 0))
-                        } animation: { chromaRotate in
-                            .easeInOut(duration: 2)
-                        }
+        ScrollView {  // Wrapped the entire content in ScrollView
+            VStack(spacing: 0) {
+                // Header area
+                VStack(spacing: 20) {
+                    Text("Result")
+                        .font(.system(size: 30, weight: .bold))
+                        .padding(.top, 40)
                     
-                    // Display total sleep cycles
-                    VStack {
-                        Text("\(totalCycles)")
-                            .font(.system(size: 40, weight: .bold))
-                            .foregroundColor(.white)
-                        Text("Cycles")
-                            .font(.caption)
-                            .foregroundColor(.white)
+                    // Circle (represent total sleep cycles)
+                    ZStack {
+                        Image("neon")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.leading, 5) // Add this line to shift right
+                            .phaseAnimator([false, true]) { wwdc24, chromaRotate in
+                                wwdc24
+                                    .hueRotation(.degrees(chromaRotate ? 420 : 0))
+                            } animation: { chromaRotate in
+                                .easeInOut(duration: 2)
+                            }
+                        
+                        // Display total sleep cycles
+                        VStack {
+                            Text("\(totalCycles)")
+                                .font(.system(size: 40, weight: .bold))
+                                .foregroundColor(.white)
+                            Text("Cycles")
+                                .font(.caption)
+                                .foregroundColor(.white)
+                        }
                     }
                 }
-            }
-            .frame(maxWidth: .infinity)
-            
-            ScrollView {
+                .frame(maxWidth: .infinity)
+                
                 VStack(spacing: 20) {
                     // Best Recommendation
                     Text("Best Sleep Times")
@@ -58,7 +58,7 @@ struct ResultsView: View {
                     
                     // Best Wake-up Time
                     DataCard(
-                        title: "Best Wake-up Time",
+                        title: "Wake-up Time",
                         subtitle: "Optimal wake-up time",
                         data: bestWakeUpTime
                     )
@@ -85,10 +85,9 @@ struct ResultsView: View {
                     }
                 }
                 .padding()
+                
+                Spacer()
             }
-            
-            Spacer()
         }
-        // Remove the onAppear modifier
     }
 }

@@ -1,19 +1,21 @@
-//
-//  AgeDropdown.swift
-//  MyFirstApp
-//
-//  Created by Romario Marcal on 17/03/25.
-//
 import SwiftUI
 
 struct AgeDropdown: View {
     @Binding var selectedOption: String
     @State private var isExpanded = false
     
-    let options = ["Children (0-12 years)",
-                   "Teenagers (13-18 years)",
-                   "Adults (19-64 years)",
-                   "Elderly (65 years+)"]
+    // Updated options to match CDC/NIH age categories
+    let options = [
+        "Newborn (0-3 months)",
+        "Infant (4-12 months)",
+        "Toddler (1-2 years)",
+        "Preschool (3-5 years)",
+        "School Age (6-12 years)",
+        "Teen (13-18 years)",
+        "Adults (19-60 years)",
+        "Older Adult (61-64 years)",
+        "Senior (65+ years)"
+    ]
     
     var body: some View {
         VStack {
@@ -28,7 +30,7 @@ struct AgeDropdown: View {
                         .foregroundColor(.primary)
                     Spacer()
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("UnguMuda"))
                 }
                 .padding()
                 .background(Color(.systemGray5))
@@ -65,4 +67,3 @@ struct AgeDropdown: View {
         }
     }
 }
-

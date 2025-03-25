@@ -16,14 +16,14 @@ struct OnboardingView: View {
             // Page Tab View for Onboarding Slides
             TabView(selection: $currentPage) {
                 OnboardingSlide(
-                    imageName: "moon.zzz.fill",
+                    imageName: "maskot",
                     title: "Track Your Sleep",
                     description: "Monitor your sleep patterns and improve your rest quality."
                 )
                 .tag(0)
                 
                 OnboardingSlide(
-                    imageName: "alarm.fill",
+                    imageName: "onboard1",
                     title: "Wake Up Refreshed",
                     description: "Get personalized insights to wake up feeling refreshed."
                 )

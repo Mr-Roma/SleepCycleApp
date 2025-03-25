@@ -8,9 +8,9 @@ struct HistoryRow: View {
     var body: some View {
         VStack(spacing: 0) { // Menghindari jarak antara card utama dan expandable view
             Button(action: {
-                withAnimation {
-                    isExpanded.toggle()
-                }
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                 isExpanded.toggle()
+                             }
             }) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -34,7 +34,7 @@ struct HistoryRow: View {
 //                        .foregroundColor(.green)
                     
                     Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color("UnguMuda"))
                         .padding(.leading)
                 }
                 .padding()
@@ -52,13 +52,13 @@ struct HistoryRow: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Best Sleep Time: \(result.deepSleepPercentage)")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("UnguMuda"))
                         Text("Best Wake-up Time: \(result.remSleepPercentage) ")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.blue)
                         Text("Total Sleep Duration: \(result.sleepDuration) ")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("Kuning"))
                     }
                     Spacer()
                 }

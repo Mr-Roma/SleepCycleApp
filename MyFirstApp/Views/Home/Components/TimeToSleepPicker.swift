@@ -25,12 +25,13 @@ struct TimeToSleepPicker: View {
                         .foregroundColor(.primary)
                     Spacer()
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("UnguMuda"))
                 }
                 .padding()
                 .background(Color(.systemGray5))
                 .cornerRadius(8)
             }
+            .padding(.horizontal)
             
             if isExpanded {
                 Picker("Minutes", selection: $fallAsleepMinutes) {
@@ -50,6 +51,7 @@ struct TimeToSleepPicker: View {
                     }
                 }
             }
+            
         }
     }
 }

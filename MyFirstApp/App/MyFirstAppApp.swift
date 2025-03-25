@@ -11,12 +11,12 @@ import SwiftUI
 struct MyFirstAppApp: App {
     var body: some Scene {
         WindowGroup {
-            SplashView()
+            OnboardingView()
         }
     }
 }
 
 
 #Preview {
-    ContentView()
+    OnboardingView()
 }

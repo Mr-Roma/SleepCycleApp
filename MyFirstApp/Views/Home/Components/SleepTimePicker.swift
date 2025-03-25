@@ -25,11 +25,12 @@ struct SleepTimePicker: View {
                         .foregroundColor(.primary)
                     Spacer()
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("UnguMuda"))
                 }
                 .padding()
                 .background(Color(.systemGray5))
                 .cornerRadius(8)
+                
             }
             
             if isExpanded {

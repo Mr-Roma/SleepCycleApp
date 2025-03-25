@@ -19,7 +19,7 @@ struct PrimaryButton: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue)
+                .background(Color("UnguMuda"))
                 .cornerRadius(10)
         }
     }

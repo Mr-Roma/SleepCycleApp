@@ -7,7 +7,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     
     var sharedModelContainer: ModelContainer = {
-            let schema = Schema([SleepResult.self]) // Pastikan model sudah benar
+            let schema = Schema([SleepResult.self])
             let container = try! ModelContainer(for: schema)
             return container
         }()
@@ -33,5 +33,6 @@ struct ContentView: View {
                 .tag(Tab.history)
         }
         .navigationBarHidden(true) // Hide the navigation bar
+        .accentColor(Color("UnguMuda"))
     }
 }

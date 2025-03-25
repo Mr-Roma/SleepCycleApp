@@ -22,7 +22,7 @@ struct DataCard: View {
                     
                     Text(subtitle)
                         .font(.subheadline)
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("UnguMuda"))
                 }
                 
                 Spacer()
