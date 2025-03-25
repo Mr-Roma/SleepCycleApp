@@ -1,15 +1,9 @@
-//
-//  OnboardingView.swift
-//  MyFirstApp
-//
-//  Created by Romario Marcal on 18/03/25.
-//
-
 import SwiftUI
 
 struct OnboardingView: View {
     @State private var currentPage = 0
     @State private var isOnboardingComplete = false
+    @Binding var isFirstLaunch: Bool
     
     var body: some View {
         VStack {
@@ -37,6 +31,7 @@ struct OnboardingView: View {
                 if currentPage < 1 {
                     currentPage += 1
                 } else {
+                    isFirstLaunch = false
                     isOnboardingComplete = true
                 }
             }) {
@@ -45,20 +40,19 @@ struct OnboardingView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(Color("UnguMuda"))
                     .cornerRadius(10)
                     .padding(.horizontal)
             }
             .padding(.bottom, 20)
         }
         .background(
-            NavigationLink(
-                destination: ContentView(),
-                isActive: $isOnboardingComplete,
-                label: { EmptyView() }
-            )
+            NavigationLink(destination: ContentView(),
+                           isActive: $isOnboardingComplete) {
+                EmptyView()
+            }
         )
-        .navigationBarHidden(true) 
+        .navigationBarHidden(true)
     }
 }
 
@@ -69,10 +63,10 @@ struct OnboardingSlide: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: imageName)
+            Image(imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 100, height: 100)
+                .frame(width: 220, height: 220)
                 .foregroundColor(.blue)
             
             Text(title)
@@ -88,4 +82,3 @@ struct OnboardingSlide: View {
         .padding()
     }
 }
-

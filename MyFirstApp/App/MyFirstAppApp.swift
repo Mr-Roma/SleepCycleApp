@@ -9,14 +9,16 @@ import SwiftUI
 
 @main
 struct MyFirstAppApp: App {
+    @AppStorage("isFirstLaunch") private var isFirstLaunch = true
     var body: some Scene {
         WindowGroup {
-            OnboardingView()
+            if isFirstLaunch {
+                          OnboardingView(isFirstLaunch: $isFirstLaunch)
+                      } else {
+                          ContentView()
+                      }
         }
     }
 }
 
 
-#Preview {
-    OnboardingView()
-}

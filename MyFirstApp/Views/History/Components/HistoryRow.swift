@@ -18,13 +18,16 @@ struct HistoryRow: View {
                             Text(date, style: .date)
                                 .font(.headline)
                                 .foregroundColor(.primary)
+                            
+                        }
+                        HStack  {
+                            Text("\(result.totalCycles) Cycles")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
                             Text(date, style: .time)
                                 .font(.headline)
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color("Kuning"))
                         }
-                        Text("\(result.totalCycles) Cycles")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
                     }
                     
                     Spacer()
@@ -55,10 +58,10 @@ struct HistoryRow: View {
                             .foregroundColor(Color("UnguMuda"))
                         Text("Best Wake-up Time: \(result.remSleepPercentage) ")
                             .font(.subheadline)
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color("UnguMuda"))
                         Text("Total Sleep Duration: \(result.sleepDuration) ")
                             .font(.subheadline)
-                            .foregroundColor(Color("Kuning"))
+                            .foregroundColor(Color("UnguMuda"))
                     }
                     Spacer()
                 }
