@@ -6,6 +6,7 @@ struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \SleepResult.timestamp, order: .reverse) var sleepResults: [SleepResult]
     
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -38,34 +39,81 @@ struct HistoryView: View {
 
 // MARK: - Subviews
 
+
+
 struct LatestResultCard: View {
     let result: SleepResult
+    @Query(sort: \SleepAlternative.timestamp)
+    var sleepAlter: [SleepAlternative]
+
+    
+    @State private var isExpanded = false
     
     var body: some View {
-        VStack(spacing: 16) {
-            HStack {
-                Text("Latest Sleep")
-                    .font(.headline)
-                    .fontWeight(.semibold)
+        VStack(spacing: 0) {
+            // Main Card Content
+            VStack(spacing: 16) {
+                HStack {
+                    Text("Latest Sleep")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    Spacer()
+                    
+                    Text(result.timestamp.formatted(date: .abbreviated, time: .omitted))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
                 
-                Spacer()
+                VStack(spacing: 20) {
+                    HStack{
+                        MetricPill(value: "\(result.totalCycles)", label: "Cycles", color: Color("UnguMuda"))
+                        MetricPill(value: result.sleepDuration, label: "Duration", color: .blue)
+                    }
+                    HStack{
+                        MetricPill(value: result.deepSleepPercentage, label: "Best Sleep Time", color: .blue)
+                        MetricPill(value: result.remSleepPercentage, label: "Wake Up Time", color: .blue)
+                    }
+                }
                 
-                Text(result.timestamp.formatted(date: .abbreviated, time: .omitted))
-                    .font(.subheadline)
+                // Expand/Collapse Indicator
+                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                     .foregroundColor(.secondary)
+                    .padding(.top, 8)
+            }
+            .padding(16)
+            .background(Color(.secondarySystemGroupedBackground))
+            .cornerRadius(14)
+            .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+            .onTapGesture {
+                withAnimation(.spring()) {
+                    isExpanded.toggle()
+                }
             }
             
-            HStack(spacing: 20) {
-                MetricPill(value: "\(result.totalCycles)", label: "Cycles", color: Color("UnguMuda"))
-                MetricPill(value: result.sleepDuration, label: "Duration", color: .blue)
+            // Expandable Content
+            if isExpanded {
+                VStack(spacing: 10) {
+                    ForEach(sleepAlter.prefix(4)) { alternative in
+                        DataCard(
+                            title: "Sleep at \(alternative.WakeUpTime)",
+                            subtitle: "Wake up at \(alternative.SleepTime)",
+                            data: alternative.sleepDuration,
+                            iconName: "bed.double.fill",
+                            accentColor: Color("UnguMuda") // Kept UnguMuda as requested
+                        )
+                    }
+                }
+                .padding(.horizontal, 8)
+                .padding(.bottom, 12)
+                .padding(.top,10)
+                
+                   
+                }
+                
             }
         }
-        .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(14)
-        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
-}
 
 struct MetricPill: View {
     let value: String
@@ -83,7 +131,7 @@ struct MetricPill: View {
                 .font(.caption2)
                 .foregroundColor(.secondary)
         }
-        .frame(width: 80)
+        .frame(width: 100)
         .padding(8)
         .background(color.opacity(0.1))
         .cornerRadius(10)

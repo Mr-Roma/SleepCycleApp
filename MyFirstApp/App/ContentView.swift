@@ -4,13 +4,20 @@ import SwiftData
 struct ContentView: View {
     @StateObject private var viewModel = SleepViewModel()
     @State private var selectedTab: Tab = .home
-    @Environment(\.modelContext) private var modelContext
     
-    var sharedModelContainer: ModelContainer = {
-            let schema = Schema([SleepResult.self])
-            let container = try! ModelContainer(for: schema)
-            return container
-        }()
+    // Create ModelContainer with multiple models
+    private let sharedModelContainer: ModelContainer = {
+        let schema = Schema([
+            SleepResult.self,
+            SleepAlternative.self  // Add SleepAlternative to the schema
+        ])
+        
+        do {
+            return try ModelContainer(for: schema)
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
     
     enum Tab {
         case home, history
@@ -32,7 +39,7 @@ struct ContentView: View {
                 }
                 .tag(Tab.history)
         }
-        .navigationBarHidden(true) // Hide the navigation bar
+        .navigationBarHidden(true)
         .accentColor(Color("UnguMuda"))
     }
 }

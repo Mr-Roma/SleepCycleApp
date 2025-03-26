@@ -163,6 +163,32 @@ class SleepViewModel: ObservableObject {
         }
     }
     
+    
+    func saveSleepAlternativ(context: ModelContext, sleepDuration: String, WakeUpTime: String, SleepTime: String, totalCycles: Int) {
+        let newResult = SleepAlternative(
+            sleepDuration: sleepDuration,
+            WakeUpTime: WakeUpTime,
+            SleepTime: SleepTime,
+            totalCycles: totalCycles
+        )
+        
+        context.insert(newResult)
+        
+        do {
+            try context.save() // Save to SwiftData with error handling
+            print("""
+                ✅ Data saved successfully:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                - Sleep Duration: \(newResult.sleepDuration)
+                - Deep Sleep: \(newResult.WakeUpTime)%
+                - REM Sleep: \(newResult.SleepTime)%
+                - Total Cycles: \(newResult.totalCycles)
+                - Timestamp: \(newResult.timestamp)
+                """)
+        } catch {
+            print("❌ Error saving sleep result: \(error.localizedDescription)")
+        }
+    }
+    
     /// Calculate the best sleep time, wake-up time, and total sleep duration
     func calculateSleepCycle() -> (bestSleepTime: String, bestWakeUpTime: String, totalSleepDuration: String, totalCycles: Int) {
         let ageCategory = sleepData.ageCategory

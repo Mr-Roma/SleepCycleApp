@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext1
     @ObservedObject var viewModel: SleepViewModel
     @State private var showResultsView = false
     @State private var showValidationAlert = false
@@ -31,7 +32,7 @@ struct HomeView: View {
                         AgeDropdown(selectedOption: $viewModel.sleepData.ageCategory)
                     }
                     .padding(.bottom, 8)
-
+                    
                     FormSectionWithInfo(
                         title: "Time to Fall Asleep",
                         infoDestination: AnyView(TimeToFallAsleepInfo())
@@ -39,7 +40,7 @@ struct HomeView: View {
                         TimeToSleepPicker(fallAsleepMinutes: $viewModel.sleepData.fallAsleepMinutes)
                     }
                     .padding(.bottom, 8)
-
+                    
                     FormSectionWithInfo(
                         title: "Wake-up Time",
                         infoDestination: AnyView(WakeUpTimeInfo())
@@ -51,9 +52,35 @@ struct HomeView: View {
                     // Analyze Button
                     Button(action: {
                         if validateInputs() {
+                            
+                            do {
+                                      // Hapus semua SleepResult
+                              try modelContext.delete(model: SleepResult.self)
+                              
+                              // Hapus semua SleepAlternative
+                              try modelContext.delete(model: SleepAlternative.self)
+                              
+                              // Simpan perubahan
+                              try modelContext.save()
+                          } catch {
+                              print("Error deleting existing records: \(error)")
+                          }
                             // Calculate sleep score, duration, and total cycles
                             let (bestTimeToSleep, bestTimeToWake, totalSleepDuration, totalCycles) = viewModel.calculateSleepCycle()
                             let sleepDurationInSeconds = convertDurationToSeconds(totalSleepDuration)
+                            
+                            let alternativeSleepTimes = viewModel.getAlternativeSleepTimes()
+                            
+                            
+                            alternativeSleepTimes.forEach { (time) in
+                                print("Alternative sleep time: \(time)")
+                                viewModel.saveSleepAlternativ(context: modelContext, sleepDuration: time.duration, WakeUpTime: time.sleepTime, SleepTime: time.wakeUpTime, totalCycles: 0)
+                                
+                            }
+                            
+                            viewModel.saveSleepAlternativ(context: modelContext1, sleepDuration: "a", WakeUpTime: "a", SleepTime: "a", totalCycles: 0)
+                            
+                            
                             
                             viewModel.saveSleepResult(
                                 context: modelContext,
