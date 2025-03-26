@@ -27,6 +27,7 @@ struct FormSectionWithInfo<Content: View>: View {
             .padding(.horizontal)
             
             content
+                .padding(.horizontal)
         }
     }
 }

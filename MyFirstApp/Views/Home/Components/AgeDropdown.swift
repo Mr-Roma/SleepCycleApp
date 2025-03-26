@@ -2,10 +2,9 @@ import SwiftUI
 
 struct AgeDropdown: View {
     @Binding var selectedOption: String
-    @State private var isExpanded = false
     
-    // Updated options to match CDC/NIH age categories
-    let options = [
+    let ageCategories = [
+        "Select Age Category",
         "Newborn (0-3 months)",
         "Infant (4-12 months)",
         "Toddler (1-2 years)",
@@ -18,52 +17,23 @@ struct AgeDropdown: View {
     ]
     
     var body: some View {
-        VStack {
-            Button(action: {
-                withAnimation {
-                    isExpanded.toggle()
+        Menu {
+            Picker("Age Category", selection: $selectedOption) {
+                ForEach(ageCategories, id: \.self) { category in
+                    Text(category).tag(category)
                 }
-            }) {
-                HStack {
-                    Text(selectedOption)
-                        .font(.subheadline)
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(Color("UnguMuda"))
-                }
-                .padding()
-                .background(Color(.systemGray5))
-                .cornerRadius(8)
             }
-            
-            if isExpanded {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(options, id: \.self) { option in
-                        Button(action: {
-                            selectedOption = option
-                            withAnimation {
-                                isExpanded = false
-                            }
-                        }) {
-                            Text(option)
-                                .font(.subheadline)
-                                .foregroundColor(.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding()
-                                .background(
-                                    selectedOption == option ?
-                                        Color.blue.opacity(0.1) :
-                                        Color(.systemBackground)
-                                )
-                        }
-                        Divider()
-                    }
-                }
-                .background(Color(.systemGray5))
-                .cornerRadius(8)
-                .shadow(radius: 2)
+        } label: {
+            HStack {
+                Text(selectedOption)
+                    .foregroundColor(selectedOption == "Select Age Category" ? .gray : .primary)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.down")
+                    .foregroundColor(Color.secondary)
             }
+            .modifier(ConsistentTextFieldStyle())
         }
     }
 }

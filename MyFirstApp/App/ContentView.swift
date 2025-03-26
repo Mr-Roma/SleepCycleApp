@@ -21,11 +21,11 @@ struct ContentView: View {
             HomeView(viewModel: viewModel)
                 .modelContainer(sharedModelContainer)
                 .tabItem {
-                    Label("Home", systemImage: "house.fill")
+                    Label("Calculate", systemImage: "moon.zzz.fill")
                 }
                 .tag(Tab.home)
             
-            HistoryView(viewModel: viewModel)
+            HistoryView()
                 .modelContainer(sharedModelContainer)
                 .tabItem {
                     Label("History", systemImage: "clock.fill")

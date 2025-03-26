@@ -22,3 +22,6 @@ struct MyFirstAppApp: App {
 }
 
 
+#Preview {
+    ContentView()
+}
