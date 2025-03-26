@@ -68,11 +68,11 @@ struct LatestResultCard: View {
                 VStack(spacing: 20) {
                     HStack{
                         MetricPill(value: "\(result.totalCycles)", label: "Cycles", color: Color("UnguMuda"))
-                        MetricPill(value: result.sleepDuration, label: "Duration", color: .blue)
+                        MetricPill(value: result.sleepDuration, label: "Duration", color: Color("Kuning"))
                     }
                     HStack{
-                        MetricPill(value: result.deepSleepPercentage, label: "Best Sleep Time", color: .blue)
-                        MetricPill(value: result.remSleepPercentage, label: "Wake Up Time", color: .blue)
+                        MetricPill(value: result.deepSleepPercentage, label: "Best Sleep Time", color: Color("Kuning"))
+                        MetricPill(value: result.remSleepPercentage, label: "Wake Up Time", color: Color("UnguMuda"))
                     }
                 }
                 
